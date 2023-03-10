@@ -15,6 +15,10 @@ Snakemake file and R scripts for producing taxonomic classification of metagenom
     **Note**: use pluspf database for kraken2 (https://benlangmead.github.io/aws-indexes/k2).
     
   - CAT/BAT and its local database (https://github.com/dutilh/CAT);
+  - Hisat2 (http://daehwankimlab.github.io/hisat2/);
+  - samtools (https://github.com/samtools/samtools);
+  - bedtools (https://github.com/arq5x/bedtools2);
+  - SPAdes (https://github.com/ablab/spades);
   - BLAST and its local nt database (https://blast.ncbi.nlm.nih.gov/Blast.cgi);
   - R and its libraries:
     - taxonomizr (https://github.com/sherrillmix/taxonomizr),
@@ -30,6 +34,8 @@ Snakemake file and R scripts for producing taxonomic classification of metagenom
  2. Open Snakemake file and provide paths to FASTQ files;
  3. Launch it and make some tea while it's doing science;
  4. Analyse results provided for you in human-readable form:)
+ 
+ **Note**: you might also need to modify paths in R scripts to accomodate your data and folder structure, because they are hardcoded now.
 
 ## Authors
 
