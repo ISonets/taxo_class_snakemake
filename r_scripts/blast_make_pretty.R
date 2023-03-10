@@ -1,0 +1,22 @@
+library(taxonomizr)
+library(writexl)
+library(dplyr)
+args = commandArgs(trailingOnly=TRUE)[1]
+file <- read.csv(args, sep='\t',header = T)
+#file = read.csv("/mnt/disk1/PROJECTS/SURPRISE/eshi_i_myshi/RESULTS/results/spades/filt_contigs/blast/F350010037_L12_13_l450_blastres_header.out",sep='\t',header=T)
+#colnames(file2)=c('contig_name','length','pident','taxid','stitle')
+file$contig_length <- as.numeric(lapply(strsplit(as.character(file$contig_name),'_'),"[",4))
+file$coverage <- as.numeric(lapply(strsplit(as.character(file$contig_name),'_'),"[",6))
+file[,9:16] <- as.data.frame(getTaxonomy(file[[6]],"/mnt/disk1/DATABASES/taxonomizr_data/taxa.sql"))
+file <- file %>% relocate(contig_length, .after=contig_name)
+file <- file %>% relocate(coverage, .after=contig_length)
+file$coverage <- as.numeric(lapply(strsplit(as.character(file$contig_name),'_'),"[",6))
+args2 = gsub(".out","_w_taxo.xlsx",args)
+write_xlsx(file, args2)
+#fun1 <- function(x) {
+#contig_name1 <- lapply(strsplit(as.character(file2$qseqid),'_'),"[",1)
+#contig_name2 <- lapply(strsplit(as.character(file2$qseqid),'_'),"[",2)
+#file2$contig_name <- paste(contig_name1, contig_name2,sep = '_')
+#return(file2$contig_name)
+#}
+#fun1()

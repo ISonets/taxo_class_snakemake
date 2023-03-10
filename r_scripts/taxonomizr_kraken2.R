@@ -1,0 +1,20 @@
+#install.packages("taxonomizr")
+library(taxonomizr)
+library(writexl)
+library(dplyr)
+args = commandArgs(trailingOnly=TRUE)[1]
+if (file.size(args) == 0L) {
+  print("File is empty")
+  args2 = gsub(".taxo.txt","_kraken2_anno.xlsx",args)
+  cat(NULL,file=args2)
+  quit() }
+file <- read.csv(args, sep='\t',header = F)
+#file <- read.csv("/mnt/disk1/PROJECTS/SURPRISE/eshi_i_myshi/RESULTS/results/spades/filt_contigs/test_taxo.txt",sep='\t',header=F)
+colnames(file) <- c('contig_name','taxaid')
+file[,3:9] <- as.data.frame(getTaxonomy(file[[2]],"/mnt/disk1/DATABASES/taxonomizr_data/taxa.sql"))
+file$contig_length <- as.numeric(lapply(strsplit(as.character(file$contig_name),'_'),"[",4))
+file$coverage <- as.numeric(lapply(strsplit(as.character(file$contig_name),'_'),"[",6))
+file <- file %>% relocate(contig_length, .after=contig_name)
+file <- file %>% relocate(coverage, .after=contig_length)
+args2 = gsub(".taxo.txt","_kraken2_anno.xlsx",args)
+write_xlsx(file, args2)
